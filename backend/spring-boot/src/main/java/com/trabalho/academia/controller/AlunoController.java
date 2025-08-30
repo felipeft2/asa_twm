@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.trabalho.academia.model.Aluno;
 import com.trabalho.academia.service.AlunoService;
+import com.trabalho.academia.security.Hash;
 
 @RestController
 @RequestMapping("/api/v1/alunos")
@@ -40,6 +41,9 @@ public class AlunoController {
 
     @PostMapping
     public ResponseEntity<Aluno> create(@RequestBody Aluno aluno){
+        String hsh = Hash.passwordHash(aluno.getHashSenha());
+        aluno.setHashSenha(hsh);
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.save(aluno));
     }
 
