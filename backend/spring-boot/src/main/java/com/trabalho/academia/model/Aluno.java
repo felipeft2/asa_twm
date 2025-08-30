@@ -26,6 +26,6 @@ public class Aluno {
     @Column(name = "telefone", length = 20)
     private String telefone;
 
-    @Column(name = "status", length = 10, columnDefinition = "VARCHAR(10) DEFAULT 'ATIVO'")
-    private String status = "ATIVO"; 
+    @Column(name = "nome", length = 50)
+    private String objetivo; 
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './RegistrationModal.css';
 
 // Nosso componente de modal recebe 3 props:
@@ -9,7 +10,8 @@ function RegistrationModal({ isOpen, onClose, type }) {
   // Estados para controlar os valores dos campos do formulário
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [senha, setSenha] = useState('');
+  const [telefone, setTelefone] = useState('');
   const [specificField, setSpecificField] = useState(''); // Campo que muda
 
   // Se o modal não estiver aberto, não renderiza nada.
@@ -21,25 +23,40 @@ function RegistrationModal({ isOpen, onClose, type }) {
   const title = type === 'aluno' ? 'Cadastrar Aluno' : 'Cadastrar Treinador';
   const specificLabel = type === 'aluno' ? 'Objetivo (Ex: Hipertrofia)' : 'Especialidade (Ex: Musculação)';
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); // Impede o recarregamento da página ao submeter o form
 
     // Cria um objeto com os dados do formulário
     const formData = {
       name,
       email,
-      password,
+      senha,
+      telefone,
       ...(type === 'aluno' ? { objetivo: specificField } : { especialidade: specificField })
     };
 
-    // --- PONTO IMPORTANTE ---
-    // Por enquanto, vamos apenas mostrar os dados no console.
-    // Quando o backend Java estiver pronto, aqui você fará a chamada `fetch`
-    // para a sua API, enviando `formData`.
-    console.log(`Dados para cadastrar ${type}:`, formData);
-    
-    alert(`Cadastro de ${type} enviado com sucesso! (Verifique o console)`);
-    onClose(); // Fecha o modal após o envio
+    const url = type === 'aluno'
+      ? 'http//localhost:8080/api/v1/alunos'  
+      : 'http//localhost:8080/api/v1/treinadores';
+    try{
+      const response = await axios.post(url, formData);
+
+      console.log('Cadastro realizado com sucesso:', response.data);
+      alert(`Cadastro de ${type} enviado com sucesso!`);
+      onClose();
+    }
+    catch(error){
+      console.error(`Erro ao cadastrar ${type}:`, error);
+
+      if(error.response){
+        alert(`Erro: ${error.response.data.message || 'Não foi possível realizar o cadastro.'}`);
+      }
+      else if (error.request) {
+        alert('Não foi possível conectar ao servidor. Tente novamente mais tarde.');
+      } else {
+        alert('Ocorreu um erro inesperado.');
+      }
+    }
   };
 
   return (
@@ -47,7 +64,7 @@ function RegistrationModal({ isOpen, onClose, type }) {
     <div className="modal-overlay" onClick={onClose}>
       {/* Impede que o clique dentro do modal feche-o (propagação) */}
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-button" onClick={onClose}>×</button>
+        <button className="close-button" onClick={onClose}>x</button>
         <h2>{title}</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -60,7 +77,11 @@ function RegistrationModal({ isOpen, onClose, type }) {
           </div>
           <div className="form-group">
             <label htmlFor="password">Senha</label>
-            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input type="password" id="password" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="telefone">Senha</label>
+            <input type="telefone" id="telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)} required />
           </div>
           <div className="form-group">
             <label htmlFor="specific">{specificLabel}</label>
