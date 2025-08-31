@@ -1,7 +1,5 @@
 package com.trabalho.academia.model;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Aluno {
+public class Treinador {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
     private long id;
@@ -34,9 +32,6 @@ public class Aluno {
     @Column(name = "tipo")
     private TipoUsuario tipo; 
 
-    @Column(name = "dataNascimento")
-    private LocalDate dataNascimento;
-
-    @Column(name = "objetivo", length = 50)
-    private String objetivo; 
+    @Column(nullable = true, name="cref", length=10)
+    private String cref;
 }

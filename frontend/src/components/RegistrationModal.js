@@ -8,10 +8,11 @@ import './RegistrationModal.css';
 // 3. type: uma string ('aluno' ou 'treinador') para sabermos qual formulário mostrar.
 function RegistrationModal({ isOpen, onClose, type }) {
   // Estados para controlar os valores dos campos do formulário
-  const [name, setName] = useState('');
+  const [nome, setName] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [telefone, setTelefone] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
   const [specificField, setSpecificField] = useState(''); // Campo que muda
 
   // Se o modal não estiver aberto, não renderiza nada.
@@ -28,16 +29,21 @@ function RegistrationModal({ isOpen, onClose, type }) {
 
     // Cria um objeto com os dados do formulário
     const formData = {
-      name,
+      nome,
       email,
       senha,
       telefone,
-      ...(type === 'aluno' ? { objetivo: specificField } : { especialidade: specificField })
+      tipo: type.toUpperCase(),
+      dataNascimento,
+      ...(type === 'aluno' 
+          ? { objetivo: specificField } 
+          : { especialidade: specificField}
+         )
     };
 
     const url = type === 'aluno'
-      ? 'http//localhost:8080/api/v1/alunos'  
-      : 'http//localhost:8080/api/v1/treinadores';
+      ? 'http://localhost:8080/api/v1/alunos'  
+      : 'http://localhost:8080/api/v1/treinadores';
     try{
       const response = await axios.post(url, formData);
 
@@ -60,32 +66,69 @@ function RegistrationModal({ isOpen, onClose, type }) {
   };
 
   return (
-    // O 'overlay' é o fundo escuro que fica atrás do modal
     <div className="modal-overlay" onClick={onClose}>
-      {/* Impede que o clique dentro do modal feche-o (propagação) */}
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>x</button>
         <h2>{title}</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Nome Completo</label>
-            <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+            <input 
+              type="text" 
+              id="name" value={nome} 
+              onChange={(e) => setName(e.target.value)} 
+              required 
+            />
           </div>
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input 
+              type="email" 
+              id="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+            />
           </div>
           <div className="form-group">
             <label htmlFor="password">Senha</label>
-            <input type="password" id="password" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+            <input 
+              type="password" 
+              id="password" 
+              value={senha} 
+              onChange={(e) => setSenha(e.target.value)} 
+              required 
+            />
           </div>
           <div className="form-group">
-            <label htmlFor="telefone">Senha</label>
-            <input type="telefone" id="telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)} required />
+            <label htmlFor="telefone">Telefone</label>
+            <input 
+              type="telefone" 
+              id="telefone" 
+              value={telefone} 
+              onChange={(e) => setTelefone(e.target.value)} 
+              required 
+            />
           </div>
           <div className="form-group">
             <label htmlFor="specific">{specificLabel}</label>
-            <input type="text" id="specific" value={specificField} onChange={(e) => setSpecificField(e.target.value)} required />
+            <input 
+              type="text" 
+              id="specific" 
+              value={specificField} 
+              onChange={(e) => setSpecificField(e.target.value)} 
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="dataNascimento">Data de Nascimento</label>
+            <input
+              type="date"
+              id="dataNascimento"
+              value={dataNascimento}
+              onChange={(e) => setDataNascimento(e.target.value)}
+              required
+            />
           </div>
           <button type="submit" className="submit-button">Cadastrar</button>
         </form>
