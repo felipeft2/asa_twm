@@ -1,33 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './RegistrationModal.css';
+// import './RegistrationModal.css'; // Não é mais necessário
 
-// Nosso componente de modal recebe 3 props:
-// 1. isOpen: um booleano que diz se o modal deve estar visível ou não.
-// 2. onClose: uma função para ser chamada quando o modal precisar ser fechado.
-// 3. type: uma string ('aluno' ou 'treinador') para sabermos qual formulário mostrar.
 function RegistrationModal({ isOpen, onClose, type }) {
-  // Estados para controlar os valores dos campos do formulário
-  const [nome, setName] = useState('');
+  const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [telefone, setTelefone] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
-  const [specificField, setSpecificField] = useState(''); // Campo que muda
+  const [specificField, setSpecificField] = useState('');
 
-  // Se o modal não estiver aberto, não renderiza nada.
+  // Limpa o formulário quando o tipo de modal muda (aluno/treinador)
+  useEffect(() => {
+    if (isOpen) {
+      setNome('');
+      setEmail('');
+      setSenha('');
+      setTelefone('');
+      setDataNascimento('');
+      setSpecificField('');
+    }
+  }, [isOpen, type]);
+
   if (!isOpen) {
     return null;
   }
 
-  // Define o título e o label do campo específico com base no 'type'
   const title = type === 'aluno' ? 'Cadastrar Aluno' : 'Cadastrar Treinador';
   const specificLabel = type === 'aluno' ? 'Objetivo (Ex: Hipertrofia)' : 'Especialidade (Ex: Musculação)';
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Impede o recarregamento da página ao submeter o form
-
-    // Cria um objeto com os dados do formulário
+    event.preventDefault();
     const formData = {
       nome,
       email,
@@ -37,27 +40,24 @@ function RegistrationModal({ isOpen, onClose, type }) {
       dataNascimento,
       ...(type === 'aluno' 
           ? { objetivo: specificField } 
-          : { especialidade: specificField}
-         )
+          : { especialidade: specificField }
+      )
     };
 
     const url = type === 'aluno'
       ? 'http://localhost:8080/api/v1/alunos'  
       : 'http://localhost:8080/api/v1/treinadores';
-    try{
+      
+    try {
       const response = await axios.post(url, formData);
-
       console.log('Cadastro realizado com sucesso:', response.data);
       alert(`Cadastro de ${type} enviado com sucesso!`);
       onClose();
-    }
-    catch(error){
+    } catch (error) {
       console.error(`Erro ao cadastrar ${type}:`, error);
-
-      if(error.response){
+      if (error.response) {
         alert(`Erro: ${error.response.data.message || 'Não foi possível realizar o cadastro.'}`);
-      }
-      else if (error.request) {
+      } else if (error.request) {
         alert('Não foi possível conectar ao servidor. Tente novamente mais tarde.');
       } else {
         alert('Ocorreu um erro inesperado.');
@@ -66,74 +66,51 @@ function RegistrationModal({ isOpen, onClose, type }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-button" onClick={onClose}>x</button>
-        <h2>{title}</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Nome Completo</label>
-            <input 
-              type="text" 
-              id="name" value={nome} 
-              onChange={(e) => setName(e.target.value)} 
-              required 
-            />
+    <>
+      {/* Overlay do modal */}
+      <div className="modal-backdrop fade show" style={{ display: 'block' }}></div>
+      
+      {/* Estrutura do Modal do Bootstrap */}
+      <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" onClick={onClose}>
+        <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content bg-dark text-white">
+            <div className="modal-header border-secondary">
+              <h5 className="modal-title text-warning">{title}</h5>
+              <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label">Nome Completo</label>
+                  <input type="text" className="form-control" id="name" value={nome} onChange={(e) => setNome(e.target.value)} required />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Email</label>
+                  <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Senha</label>
+                  <input type="password" className="form-control" id="password" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="telefone" className="form-label">Telefone</label>
+                  <input type="tel" className="form-control" id="telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)} required />
+                </div>
+                 <div className="mb-3">
+                  <label htmlFor="dataNascimento" className="form-label">Data de Nascimento</label>
+                  <input type="date" className="form-control" id="dataNascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} required />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="specific" className="form-label">{specificLabel}</label>
+                  <input type="text" className="form-control" id="specific" value={specificField} onChange={(e) => setSpecificField(e.target.value)} required />
+                </div>
+                <button type="submit" className="btn btn-warning w-100 fw-bold">Cadastrar</button>
+              </form>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Senha</label>
-            <input 
-              type="password" 
-              id="password" 
-              value={senha} 
-              onChange={(e) => setSenha(e.target.value)} 
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="telefone">Telefone</label>
-            <input 
-              type="telefone" 
-              id="telefone" 
-              value={telefone} 
-              onChange={(e) => setTelefone(e.target.value)} 
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="specific">{specificLabel}</label>
-            <input 
-              type="text" 
-              id="specific" 
-              value={specificField} 
-              onChange={(e) => setSpecificField(e.target.value)} 
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="dataNascimento">Data de Nascimento</label>
-            <input
-              type="date"
-              id="dataNascimento"
-              value={dataNascimento}
-              onChange={(e) => setDataNascimento(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="submit-button">Cadastrar</button>
-        </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
