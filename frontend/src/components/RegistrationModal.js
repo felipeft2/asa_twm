@@ -38,14 +38,15 @@ function RegistrationModal({ isOpen, onClose, type }) {
       dataNascimento,
       ...(type === 'aluno' 
           ? { objetivo: specificField } 
-          : { especialidade: specificField }
+          : { cref: specificField }
       )
     };
 
-    const url = type === 'aluno'
-      ? 'http://localhost:8080/api/v1/alunos'  
-      : 'http://localhost:8080/api/v1/treinadores';
+    //const url = type === 'aluno'
+    //  ? 'http://localhost:8080/api/v1/alunos'  
+    //  : 'http://localhost:8080/api/v1/treinadores';
       
+    const url = 'http://localhost:8080/api/v1/usuarios'
     try {
       const response = await axios.post(url, formData);
       console.log('Cadastro realizado com sucesso:', response.data);
