@@ -3,35 +3,11 @@ import WorkoutCard from './components/WorkoutCard';
 import RegistrationModal from './components/RegistrationModal';
 import LoginModal from './components/LoginModal';
 import Header from './components/Header';
-import './App.css'; // Importe o CSS customizado aqui
-
-const mockWorkouts = [
-    // Seus dados de treino...
-  {
-    id: 1,
-    title: 'Membros Inferiores',
-    description: 'Um treino focado no fortalecimento e hipertrofia de pernas e glúteos. Essencial para uma base sólida e equilíbrio corporal.',
-    image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80',
-    instructor: 'Ana Silva'
-  },
-  {
-    id: 2,
-    title: 'Membros Superiores',
-    description: 'Desenvolva força e definição para peito, costas, ombros, bíceps e tríceps. Melhore sua postura e força funcional.',
-    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-    instructor: 'Carlos Souza'
-  },
-  {
-    id: 3,
-    title: 'Mobilidade e Flexibilidade',
-    description: 'Aumente sua amplitude de movimento, previna lesões e melhore sua performance em todos os outros treinos. Ideal para relaxamento.',
-    image: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB3MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
-    instructor: 'Juliana Paes'
-  }
-];
+import './App.css';
+import mockWorkouts from './data/mockWorkouts.json';
 
 function App() {
-  const [workouts] = useState(mockWorkouts);
+  const [workouts] = useState(mockWorkouts.mockWorkouts);
   const [myWorkouts, setMyWorkouts] = useState([]);
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,7 +23,7 @@ function App() {
 
   const handleLogin = (userData) => {
     setIsLoggedIn(true);
-    setMyWorkouts([mockWorkouts[0]]); 
+    setMyWorkouts([mockWorkouts.mockWorkouts[0]]); 
     setCurrentView('my'); 
     alert(`Bem-vindo(a), ${userData.email}!`);
   };

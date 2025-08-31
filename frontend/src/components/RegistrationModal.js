@@ -25,7 +25,7 @@ function RegistrationModal({ isOpen, onClose, type }) {
   }
 
   const title = type === 'aluno' ? 'Cadastrar Aluno' : 'Cadastrar Treinador';
-  const specificLabel = type === 'aluno' ? 'Objetivo (Ex: Hipertrofia)' : 'Especialidade (Ex: Musculação)';
+  const specificLabel = type === 'aluno' ? 'Objetivo (Ex: Hipertrofia)' : 'CREF';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -41,10 +41,6 @@ function RegistrationModal({ isOpen, onClose, type }) {
           : { cref: specificField }
       )
     };
-
-    //const url = type === 'aluno'
-    //  ? 'http://localhost:8080/api/v1/alunos'  
-    //  : 'http://localhost:8080/api/v1/treinadores';
       
     const url = 'http://localhost:8080/api/v1/usuarios'
     try {

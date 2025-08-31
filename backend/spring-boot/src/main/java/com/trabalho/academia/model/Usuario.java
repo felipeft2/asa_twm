@@ -1,5 +1,7 @@
 package com.trabalho.academia.model;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -46,4 +48,7 @@ public abstract class Usuario {
 
     @Column(name = "telefone", length = 20)
     private String telefone;
+
+    @Column(name = "dataNascimento")
+    private LocalDate dataNascimento;
 }
