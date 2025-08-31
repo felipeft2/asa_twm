@@ -1,7 +1,5 @@
 package com.trabalho.academia.model;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -14,12 +12,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper=true)
 @Entity
-public class Aluno extends Usuario{
-    @Column(name = "dataNascimento")
-    private LocalDate dataNascimento;
-
-    @Column(name = "objetivo", length = 50)
-    private String objetivo; 
+public class Treinador extends Usuario{
+    @Column(nullable = true, name="cref", length=10)
+    private String cref;
 }

@@ -1,19 +1,23 @@
 import React from 'react';
-import './WorkoutCard.css';
 
-// Este é um componente de apresentação, ele apenas recebe os dados via props e os exibe.
-function WorkoutCard({ workout }) {
-  // Desestruturamos as propriedades do objeto 'workout' para facilitar o uso
+function WorkoutCard({ workout, onAddWorkout, showAddButton }) {
   const { title, description, instructor, image } = workout;
 
   return (
-    <div className="workout-card">
-      <img src={image} alt={`Imagem do treino de ${title}`} className="card-image" />
-      <div className="card-content">
-        <h3 className="card-title">{title}</h3>
-        <p className="card-instructor">com {instructor}</p>
-        <p className="card-description">{description}</p>
-        <button className="card-button">Ver Detalhes</button>
+    <div className="card bg-secondary text-white h-100 shadow-lg border-0">
+      <img src={image} className="card-img-top" alt={`Imagem do treino de ${title}`} />
+      <div className="card-body d-flex flex-column">
+        <h5 className="card-title text-white">{title}</h5> {/* Título branco */}
+        <h6 className="card-subtitle mb-2 text-warning fst-italic">com {instructor}</h6> {/* Subtítulo amarelo */}
+        <p className="card-text flex-grow-1 text-light">{description}</p> {/* Descrição light */}
+        <div className="d-flex justify-content-between align-items-center mt-auto">
+          <a href="#" className="btn btn-outline-warning">Ver Detalhes</a> {/* Botão outline amarelo */}
+          {showAddButton && (
+             <button className="btn btn-warning" onClick={() => onAddWorkout(workout)}> {/* Botão amarelo sólido */}
+                + Adicionar
+             </button>
+          )}
+        </div>
       </div>
     </div>
   );
