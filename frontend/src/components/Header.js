@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Recebe novas props para controlar o estado de login e a visão atual
 function Header({ 
   openModal, 
   openLoginModal, 
@@ -12,7 +11,7 @@ function Header({
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
       <div className="container">
-        <a className="navbar-brand fw-bold text-warning" href="#" onClick={() => setCurrentView('all')}>GymLife</a>
+        <a className="navbar-brand fw-bold text-warning" href="#" onClick={() => setCurrentView('all')}>GymLife</a> {/* Logo amarelo */}
         <button 
           className="navbar-toggler" 
           type="button" 
@@ -33,7 +32,7 @@ function Header({
                 Todos os Treinos
               </a>
             </li>
-            {isLoggedIn && ( // Mostra "Meus Treinos" apenas se estiver logado
+            {isLoggedIn && ( 
               <li className="nav-item">
                 <a 
                   className={`nav-link ${currentView === 'my' ? 'active fw-bold' : ''}`} 
@@ -47,10 +46,8 @@ function Header({
 
           <div className="d-flex gap-2">
             {isLoggedIn ? (
-              // Se estiver logado, mostra o botão de Logout
               <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
             ) : (
-              // Se não, mostra Login e Cadastro
               <>
                 <button className="btn btn-outline-light" onClick={openLoginModal}>Login</button>
                 <div className="dropdown">

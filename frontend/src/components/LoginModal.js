@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// Recebe a função de fechar (onClose) e a função para simular o login (onLogin)
 function LoginModal({ isOpen, onClose, onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,11 +10,9 @@ function LoginModal({ isOpen, onClose, onLogin }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Em uma aplicação real, aqui você faria uma chamada de API para autenticar.
-    // Para este exemplo, vamos apenas simular um login bem-sucedido.
     console.log('Tentativa de login com:', { email, password });
-    onLogin({ email: email }); // Passa o email para o App.js
-    onClose(); // Fecha o modal após o login
+    onLogin({ email: email }); 
+    onClose(); 
   };
 
   return (
@@ -23,9 +20,9 @@ function LoginModal({ isOpen, onClose, onLogin }) {
       <div className="modal-backdrop fade show" style={{ display: 'block' }}></div>
       <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" onClick={onClose}>
         <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-content bg-dark text-white">
+          <div className="modal-content bg-dark text-white"> {/* bg-dark e text-white */}
             <div className="modal-header border-secondary">
-              <h5 className="modal-title text-warning">Login</h5>
+              <h5 className="modal-title text-warning">Login</h5> {/* Título amarelo */}
               <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
             </div>
             <div className="modal-body">
@@ -52,7 +49,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
                     required 
                   />
                 </div>
-                <button type="submit" className="btn btn-warning w-100 fw-bold">Entrar</button>
+                <button type="submit" className="btn btn-warning w-100 fw-bold">Entrar</button> {/* Botão amarelo */}
               </form>
             </div>
           </div>

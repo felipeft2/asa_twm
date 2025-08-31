@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import './RegistrationModal.css'; // Não é mais necessário
 
 function RegistrationModal({ isOpen, onClose, type }) {
   const [nome, setNome] = useState('');
@@ -10,7 +9,6 @@ function RegistrationModal({ isOpen, onClose, type }) {
   const [dataNascimento, setDataNascimento] = useState('');
   const [specificField, setSpecificField] = useState('');
 
-  // Limpa o formulário quando o tipo de modal muda (aluno/treinador)
   useEffect(() => {
     if (isOpen) {
       setNome('');
@@ -67,15 +65,13 @@ function RegistrationModal({ isOpen, onClose, type }) {
 
   return (
     <>
-      {/* Overlay do modal */}
       <div className="modal-backdrop fade show" style={{ display: 'block' }}></div>
       
-      {/* Estrutura do Modal do Bootstrap */}
       <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" onClick={onClose}>
         <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-content bg-dark text-white">
+          <div className="modal-content bg-dark text-white"> {/* bg-dark e text-white */}
             <div className="modal-header border-secondary">
-              <h5 className="modal-title text-warning">{title}</h5>
+              <h5 className="modal-title text-warning">{title}</h5> {/* Título amarelo */}
               <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
             </div>
             <div className="modal-body">
@@ -104,7 +100,7 @@ function RegistrationModal({ isOpen, onClose, type }) {
                   <label htmlFor="specific" className="form-label">{specificLabel}</label>
                   <input type="text" className="form-control" id="specific" value={specificField} onChange={(e) => setSpecificField(e.target.value)} required />
                 </div>
-                <button type="submit" className="btn btn-warning w-100 fw-bold">Cadastrar</button>
+                <button type="submit" className="btn btn-warning w-100 fw-bold">Cadastrar</button> {/* Botão amarelo */}
               </form>
             </div>
           </div>
