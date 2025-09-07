@@ -56,7 +56,10 @@ public class UsuarioController {
     public ResponseEntity<Usuario> create(@RequestBody Usuario usuario){
         String hsh = Hash.passwordHash(usuario.getSenha());
         usuario.setSenha(hsh);
-        
+        Optional<Usuario> user = usuarioService.findByEmail(usuario.getEmail());
+        if(user.isPresent())
+            return ResponseEntity.status(HttpStatus.FOUND).build(); 
+
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
 

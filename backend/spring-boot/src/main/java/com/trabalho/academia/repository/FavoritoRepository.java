@@ -1,5 +1,8 @@
 package com.trabalho.academia.repository;
 
-public class FavoritoRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.trabalho.academia.model.Favorito;
+
+public interface FavoritoRepository extends JpaRepository<Favorito, Long>{
     
 }
