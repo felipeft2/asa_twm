@@ -41,6 +41,17 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Usuario> findByEmail(@RequestBody Usuario usuario){
+        Optional<Usuario> user = usuarioService.findByEmail(usuario.getEmail());
+        String senha = Hash.passwordHash(usuario.getSenha());
+
+        if(!user.isPresent() || !user.get().getSenha().equals(senha)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user.get());
+    } 
+
     @PostMapping
     public ResponseEntity<Usuario> create(@RequestBody Usuario usuario){
         String hsh = Hash.passwordHash(usuario.getSenha());

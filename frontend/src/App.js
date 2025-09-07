@@ -1,34 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import WorkoutCard from './components/WorkoutCard';
 import RegistrationModal from './components/RegistrationModal';
 import LoginModal from './components/LoginModal';
 import Header from './components/Header';
 import './App.css';
+import axios from 'axios';
 import mockWorkouts from './data/mockWorkouts.json';
 
 function App() {
   const [workouts] = useState(mockWorkouts.mockWorkouts);
   const [myWorkouts, setMyWorkouts] = useState([]);
   
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() =>{
+    return localStorage.getItem('isLoggedIn') === 'true';
+  });
   const [currentView, setCurrentView] = useState('all'); // 'all' ou 'my'
   
   const [registrationModalInfo, setRegistrationModalInfo] = useState({ isOpen: false, type: null });
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  useEffect(() =>{
+    const loggedInStatus = localStorage.getItem('isLoggedIn');
+    if(loggedInStatus === 'true'){
+      setIsLoggedIn(true);
+      setCurrentView('my');
+      setMyWorkouts([mockWorkouts.mockWorkouts[0]])
+    }
+  }, []);
 
   const openRegistrationModal = (type) => setRegistrationModalInfo({ isOpen: true, type: type });
   const closeRegistrationModal = () => setRegistrationModalInfo({ isOpen: false, type: null });
   const openLoginModal = () => setIsLoginModalOpen(true);
   const closeLoginModal = () => setIsLoginModalOpen(false);
 
-  const handleLogin = (userData) => {
-    setIsLoggedIn(true);
-    setMyWorkouts([mockWorkouts.mockWorkouts[0]]); 
-    setCurrentView('my'); 
-    alert(`Bem-vindo(a), ${userData.email}!`);
+  const handleLogin = async (userData) => {
+    const loginCredentials = {
+      tipo:"ALUNO",
+      objetivo:"",
+      nome: "",
+      email: userData.email,
+      senha: userData.senha,
+      telefone: "",
+      dataNascimento: ""
+
+    };
+
+    const url = 'http://localhost:8080/api/v1/usuarios/login';
+
+    try{
+      const response = await axios.post(url, loginCredentials);
+      console.log('Login realizado com sucesso:', response.data);
+      alert(`Login de ${response.data.tipo} enviado com sucesso.`);
+
+      localStorage.setItem('isLoggedIn', 'true');
+      setIsLoggedIn(true);
+
+      setMyWorkouts([mockWorkouts.mockWorkouts[0]]);
+      setCurrentView('my');
+      alert(`Bem-vindo(a), ${userData.email || userData.email}`);
+      closeLoginModal();
+    } catch(error){
+      console.error('Erro ao fazer login:', error);
+      if (error.response){
+        alert(`Erro: ${error.response.data.message || 'Não foi possível realizar o login.'}`);
+      }
+      else if (error.request) {
+        alert('Não foi possível conectar ao servidor. Tente novamente mais tarde.');
+      } 
+      else {
+        alert('Ocorreu um erro inesperado.');
+      }
+    }
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
     setMyWorkouts([]);
     setCurrentView('all'); 

@@ -11,7 +11,7 @@ function LoginModal({ isOpen, onClose, onLogin }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Tentativa de login com:', { email, password });
-    onLogin({ email: email }); 
+    onLogin({ email: email, senha: password }); 
     onClose(); 
   };
 
