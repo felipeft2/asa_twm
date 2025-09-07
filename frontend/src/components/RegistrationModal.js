@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
-function RegistrationModal({ isOpen, onClose, type }) {
+function RegistrationModal({ isOpen, onClose, type, onSubmit }) {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [telefone, setTelefone] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [specificField, setSpecificField] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      // Reset form when modal opens
       setNome('');
       setEmail('');
       setSenha('');
       setTelefone('');
       setDataNascimento('');
       setSpecificField('');
+      setLoading(false);
     }
   }, [isOpen, type]);
 
@@ -29,34 +31,27 @@ function RegistrationModal({ isOpen, onClose, type }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    
     const formData = {
+      tipo: type,
       nome,
       email,
       senha,
       telefone,
-      tipo: type.toUpperCase(),
       dataNascimento,
       ...(type === 'aluno' 
           ? { objetivo: specificField } 
           : { cref: specificField }
       )
     };
-      
-    const url = 'http://localhost:8080/api/v1/usuarios'
+    
     try {
-      const response = await axios.post(url, formData);
-      console.log('Cadastro realizado com sucesso:', response.data);
-      alert(`Cadastro de ${type} enviado com sucesso!`);
-      onClose();
+      await onSubmit(formData);
     } catch (error) {
-      console.error(`Erro ao cadastrar ${type}:`, error);
-      if (error.response) {
-        alert(`Erro: ${error.response.data.message || 'Não foi possível realizar o cadastro.'}`);
-      } else if (error.request) {
-        alert('Não foi possível conectar ao servidor. Tente novamente mais tarde.');
-      } else {
-        alert('Ocorreu um erro inesperado.');
-      }
+      console.error('Error in registration:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,38 +61,100 @@ function RegistrationModal({ isOpen, onClose, type }) {
       
       <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" onClick={onClose}>
         <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-content bg-dark text-white"> {/* bg-dark e text-white */}
+          <div className="modal-content bg-dark text-white">
             <div className="modal-header border-secondary">
-              <h5 className="modal-title text-warning">{title}</h5> {/* Título amarelo */}
-              <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
+              <h5 className="modal-title text-warning">{title}</h5>
+              <button 
+                type="button" 
+                className="btn-close btn-close-white" 
+                onClick={onClose}
+                disabled={loading}
+              ></button>
             </div>
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">Nome Completo</label>
-                  <input type="text" className="form-control" id="name" value={nome} onChange={(e) => setNome(e.target.value)} required />
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    id="name" 
+                    value={nome} 
+                    onChange={(e) => setNome(e.target.value)} 
+                    required 
+                    disabled={loading}
+                  />
                 </div>
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">Email</label>
-                  <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  <input 
+                    type="email" 
+                    className="form-control" 
+                    id="email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    required 
+                    disabled={loading}
+                  />
                 </div>
                 <div className="mb-3">
                   <label htmlFor="password" className="form-label">Senha</label>
-                  <input type="password" className="form-control" id="password" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+                  <input 
+                    type="password" 
+                    className="form-control" 
+                    id="password" 
+                    value={senha} 
+                    onChange={(e) => setSenha(e.target.value)} 
+                    required 
+                    minLength="6"
+                    disabled={loading}
+                  />
+                  <small className="form-text text-muted">Mínimo de 6 caracteres</small>
                 </div>
                 <div className="mb-3">
                   <label htmlFor="telefone" className="form-label">Telefone</label>
-                  <input type="tel" className="form-control" id="telefone" value={telefone} onChange={(e) => setTelefone(e.target.value)} required />
+                  <input 
+                    type="tel" 
+                    className="form-control" 
+                    id="telefone" 
+                    value={telefone} 
+                    onChange={(e) => setTelefone(e.target.value)} 
+                    placeholder="(00) 00000-0000"
+                    required 
+                    disabled={loading}
+                  />
                 </div>
-                 <div className="mb-3">
+                <div className="mb-3">
                   <label htmlFor="dataNascimento" className="form-label">Data de Nascimento</label>
-                  <input type="date" className="form-control" id="dataNascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} required />
+                  <input 
+                    type="date" 
+                    className="form-control" 
+                    id="dataNascimento" 
+                    value={dataNascimento} 
+                    onChange={(e) => setDataNascimento(e.target.value)} 
+                    required 
+                    disabled={loading}
+                  />
                 </div>
                 <div className="mb-3">
                   <label htmlFor="specific" className="form-label">{specificLabel}</label>
-                  <input type="text" className="form-control" id="specific" value={specificField} onChange={(e) => setSpecificField(e.target.value)} required />
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    id="specific" 
+                    value={specificField} 
+                    onChange={(e) => setSpecificField(e.target.value)} 
+                    required 
+                    disabled={loading}
+                  />
                 </div>
-                <button type="submit" className="btn btn-warning w-100 fw-bold">Cadastrar</button> {/* Botão amarelo */}
+                <button 
+                  type="submit" 
+                  className="btn btn-warning w-100 fw-bold"
+                  disabled={loading}
+                >
+                  {loading ? 'Cadastrando...' : 'Cadastrar'}
+                </button>
               </form>
             </div>
           </div>
