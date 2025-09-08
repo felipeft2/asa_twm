@@ -55,12 +55,12 @@ export const userService = {
   // Login user
   login: async (credentials) => {
     try {
-      const response = await api.post('/usuarios/login', credentials);
+      const response = await api.post("/usuarios/login", credentials);
       // Store auth token if returned by backend
-      if (response.data.token) {
-        localStorage.setItem('authToken', response.data.token);
+      if (response.data.id) {
+        localStorage.setItem('authToken', response.data.id);
       }
-      return response.data;
+      return response;
     } catch (error) {
       throw error.response?.data || error;
     }

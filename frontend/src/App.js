@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import WorkoutCard from './components/WorkoutCard';
 import RegistrationModal from './components/RegistrationModal';
 import LoginModal from './components/LoginModal';
@@ -18,14 +18,27 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Load user's favorites when logged in
   useEffect(() => {
-    if (isLoggedIn && currentUser) {
-      loadUserFavorites();
-    }
-  }, [isLoggedIn, currentUser]);
+    const checkLoggedInUser = async() => {
+      const token = localStorage.getItem("authToken");
+      if(token){
+        try{
+          const user = await userService.getUserById(token);
+          setCurrentUser(user); 
+          setIsLoggedIn(true); 
+        }
+        catch(error){
+          console.error("Session expired or token is invalid.", error);
+            localStorage.removeItem('authToken');
+            setCurrentUser(null);
+            setIsLoggedIn(false);
+        }
+      }
+    };
+    checkLoggedInUser();
+  }, []); 
 
-  const loadUserFavorites = async () => {
+  const loadUserFavorites = useCallback(async () => {
     try {
       setLoading(true);
       const favorites = await favoritoService.getAllFavorites();
@@ -39,7 +52,13 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser) {
+      loadUserFavorites();
+    }
+  }, [currentUser, loadUserFavorites]);
 
   const openRegistrationModal = (type) => setRegistrationModalInfo({ isOpen: true, type: type });
   const closeRegistrationModal = () => setRegistrationModalInfo({ isOpen: false, type: null });
@@ -92,17 +111,16 @@ function App() {
       };
 
       const response = await userService.login(loginCredentials);
-      console.log('Login successful:', response);
+      console.log('Login successful:', response.data.nome);
       
-      setCurrentUser(response);
+      localStorage.setItem('authToken', response.data.id); 
+
+      setCurrentUser(response.data);
       setIsLoggedIn(true);
       setCurrentView('my');
       
       alert(`Bem-vindo(a), ${response.nome || userData.email}!`);
       closeLoginModal();
-      
-      // Load user's workouts after login
-      await loadUserFavorites();
     } catch (error) {
       console.error('Login error:', error);
       setError(error.message || 'Email ou senha incorretos.');
@@ -113,6 +131,7 @@ function App() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('authToken'); 
     setIsLoggedIn(false);
     setCurrentUser(null);
     setMyWorkouts([]);

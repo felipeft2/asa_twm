@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 
@@ -21,9 +23,9 @@ public class Treino {
     private String descricao;
 
     /* NECESSÁRIO IMPLEMENTAR TREINADOR */
-    // @ManyToOne
-    // @JoinColumn(name = "id_treinador")
-    // private Treinador treinador;
+    @ManyToOne
+    @JoinColumn(name = "id_treinador")
+    private Treinador treinador;
 
     @OneToMany(mappedBy = "treino", cascade = CascadeType.ALL)
     private List<TreinoExercicio> treinoExercicios;
