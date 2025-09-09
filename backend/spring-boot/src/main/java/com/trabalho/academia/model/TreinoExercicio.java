@@ -1,29 +1,36 @@
 package com.trabalho.academia.model;
 
-import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import lombok.Data;
 
-@Entity
 @Data
+@Entity
 public class TreinoExercicio {
-    @EmbeddedId
-    private TreinoExercicioId id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private long id;
 
-    @ManyToOne
-    @MapsId("idTreino")
-    @JoinColumn(name = "id_treino")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "treino")
     private Treino treino;
 
-    @ManyToOne
-    @MapsId("idExercicio")
-    @JoinColumn(name = "id_exercicio")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exercicio")
     private Exercicio exercicio;
 
-    private Integer series;
-    private Integer repeticoes;
-    private Integer carga;
+    @Column(name = "series")
+    private Long series;
+
+    @Column(name = "repeticoes")
+    private Long repeticoes;
+
+    @Column(name = "carga")
+    private Long carga;
 }
