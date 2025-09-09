@@ -3,6 +3,7 @@
   --gymlife-yellow: #FFC107; /* O amarelo padrão do Bootstrap Warning */
   --gymlife-dark: #212529; /* Cor de fundo principal */
   --gymlife-secondary-dark: #343a40; /* Um cinza mais escuro para cards, etc. */
+  --gymlife-accent: #495057; /* Cor de acento para bordas */
 }
 
 /* Garante que o fundo da página seja preto */
@@ -10,15 +11,342 @@ body {
   background-color: #000 !important; /* Fundo totalmente preto */
 }
 
-/* Força o tema escuro em todos os modais */
+.navbar {
+  background: linear-gradient(135deg, rgba(33, 37, 41, 0.95) 0%, rgba(52, 58, 64, 0.95) 100%) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--gymlife-yellow);
+  box-shadow: 0 2px 20px rgba(255, 193, 7, 0.1);
+  transition: all 0.3s ease;
+}
+
+.navbar-brand {
+  font-size: 1.8rem !important;
+  font-weight: 800 !important;
+  color: var(--gymlife-yellow) !important;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: var(--gymlife-yellow) !important;
+  text-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+  transform: scale(1.05);
+}
+
+.navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-nav .nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 193, 7, 0.1), transparent);
+  transition: left 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover::before {
+  left: 100%;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--gymlife-yellow) !important;
+  background-color: rgba(255, 193, 7, 0.1);
+  transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link.active {
+  color: var(--gymlife-yellow) !important;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 193, 7, 0.05) 100%);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.2);
+}
+
+.navbar-toggler {
+  border: 2px solid var(--gymlife-yellow) !important;
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.navbar-toggler:hover {
+  background-color: rgba(255, 193, 7, 0.1);
+  transform: scale(1.05);
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23FFC107' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+.btn {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.dropdown-menu {
+  background: linear-gradient(135deg, var(--gymlife-secondary-dark) 0%, var(--gymlife-dark) 100%) !important;
+  border: 1px solid rgba(255, 193, 7, 0.3) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 193, 7, 0.1) !important;
+  backdrop-filter: blur(10px);
+  margin-top: 0.5rem !important;
+}
+
+.dropdown-item {
+  color: rgba(255, 255, 255, 0.85) !important;
+  padding: 0.75rem 1.25rem !important;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin: 0.25rem 0.5rem;
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 193, 7, 0.05) 100%) !important;
+  color: var(--gymlife-yellow) !important;
+  transform: translateX(5px);
+}
+
+.dropdown-toggle::after {
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.dropdown.show .dropdown-toggle::after {
+  transform: rotate(180deg);
+}
+
+.navbar .container {
+  padding: 0.5rem 1rem;
+}
+
+.navbar .d-flex {
+  gap: 0.75rem !important;
+}
+
+.navbar-nav {
+  align-items: center;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .navbar-nav .nav-link {
+    margin: 0.25rem 0;
+    text-align: center;
+  }
+  
+  .navbar .d-flex {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+}
+
+.modal-backdrop {
+  backdrop-filter: blur(5px) !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
 .modal-content {
-  background-color: var(--gymlife-secondary-dark) !important;
+  background: linear-gradient(135deg, var(--gymlife-secondary-dark) 0%, var(--gymlife-dark) 100%) !important;
   color: #fff;
-  border-color: #495057; /* Borda um pouco mais clara */
+  border: 1px solid rgba(255, 193, 7, 0.3) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 193, 7, 0.1) !important;
+  backdrop-filter: blur(20px);
+  overflow: hidden;
 }
 
 .modal-header {
-  border-bottom-color: #495057 !important;
+  border-bottom: 1px solid rgba(255, 193, 7, 0.2) !important;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, transparent 100%);
+  padding: 1.5rem !important;
+}
+
+.modal-title {
+  color: var(--gymlife-yellow) !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+}
+
+.modal-body {
+  padding: 2rem !important;
+  background: transparent;
+}
+
+.modal-footer {
+  border-top: 1px solid rgba(255, 193, 7, 0.2) !important;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 193, 7, 0.05) 100%);
+  padding: 1.5rem !important;
+}
+
+.btn-close {
+  filter: invert(1) sepia(1) saturate(5) hue-rotate(45deg) brightness(1.2) !important;
+  opacity: 0.8 !important;
+  transition: all 0.3s ease;
+}
+
+.btn-close:hover {
+  opacity: 1 !important;
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* === FORM IMPROVEMENTS === */
+.form-control {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 193, 7, 0.3) !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+  padding: 0.75rem 1rem !important;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.form-control:focus {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--gymlife-yellow) !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.form-label {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.form-check-input {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 193, 7, 0.5) !important;
+  transition: all 0.3s ease;
+}
+
+.form-check-input:checked {
+  background-color: var(--gymlife-yellow) !important;
+  border-color: var(--gymlife-yellow) !important;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25) !important;
+}
+
+.form-check-label {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* === PHONE INPUT MASK STYLING === */
+.form-control[type="tel"],
+.form-control.phone-input {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.form-control[type="tel"]:focus,
+.form-control.phone-input:focus {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--gymlife-yellow) !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.form-control[type="tel"]::placeholder,
+.form-control.phone-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-family: 'Courier New', monospace;
+}
+
+/* Phone input validation states */
+.form-control.phone-input.is-valid {
+  border-color: #28a745 !important;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+.form-control.phone-input.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Input group for phone with country code */
+.input-group .input-group-text.phone-prefix {
+  background: rgba(255, 193, 7, 0.15) !important;
+  border-color: rgba(255, 193, 7, 0.3) !important;
+  color: var(--gymlife-yellow) !important;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.modal.fade .modal-dialog {
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+  transform: translate(0, -50px) scale(0.9);
+}
+
+.modal.show .modal-dialog {
+  transform: translate(0, 0) scale(1);
+}
+
+.input-group-text {
+  background: rgba(255, 193, 7, 0.1) !important;
+  border-color: rgba(255, 193, 7, 0.3) !important;
+  color: var(--gymlife-yellow) !important;
+}
+
+.alert {
+  border-radius: 8px !important;
+  border: none !important;
+  backdrop-filter: blur(10px);
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.15) 0%, rgba(220, 53, 69, 0.05) 100%) !important;
+  color: #ff6b7d !important;
+  border-left: 4px solid #dc3545 !important;
+}
+
+.alert-success {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.15) 0%, rgba(40, 167, 69, 0.05) 100%) !important;
+  color: #51cf66 !important;
+  border-left: 4px solid #28a745 !important;
 }
 
 /* Estilo para os cards, para um fundo mais escuro */
@@ -34,20 +362,57 @@ body {
 
 /* Botões de destaque em amarelo */
 .btn-warning {
-  background-color: var(--gymlife-yellow) !important;
+  background: linear-gradient(135deg, var(--gymlife-yellow) 0%, #ffb300 100%) !important;
   border-color: var(--gymlife-yellow) !important;
-  color: var(--gymlife-dark) !important; /* Texto escuro no botão amarelo */
+  color: var(--gymlife-dark) !important;
   font-weight: bold;
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, #ffb300 0%, var(--gymlife-yellow) 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
 }
 
 .btn-outline-warning {
   border-color: var(--gymlife-yellow) !important;
   color: var(--gymlife-yellow) !important;
+  background: transparent;
+  position: relative;
 }
 
 .btn-outline-warning:hover {
   background-color: var(--gymlife-yellow) !important;
   color: var(--gymlife-dark) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+}
+
+.btn-outline-light {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  color: #fff !important;
+  transform: translateY(-2px);
+}
+
+.btn-outline-danger {
+  border-color: #dc3545 !important;
+  color: #dc3545 !important;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
 }
 
 /* Texto de destaque em amarelo */
@@ -66,9 +431,4 @@ body {
   background-color: var(--gymlife-secondary-dark) !important;
   color: #fff !important;
   border-color: #495057;
-}
-
-/* Garante que o texto de um link ativo no navbar seja amarelo */
-.navbar-nav .nav-link.active {
-  color: var(--gymlife-yellow) !important;
 }
