@@ -55,6 +55,35 @@ function RegistrationModal({ isOpen, onClose, type, onSubmit }) {
     }
   };
 
+  // Phone mask function
+  const formatPhoneNumber = (value) => {
+    // Remove all non-digits
+    const phoneNumber = value.replace(/\D/g, '');
+    
+    // Limit to 11 digits (Brazilian mobile format)
+    const limitedPhone = phoneNumber.slice(0, 11);
+    
+    // Apply formatting based on length
+    if (limitedPhone.length <= 2) {
+      return `(${limitedPhone}`;
+    } else if (limitedPhone.length <= 7) {
+      return `(${limitedPhone.slice(0, 2)}) ${limitedPhone.slice(2)}`;
+    } else {
+      return `(${limitedPhone.slice(0, 2)}) ${limitedPhone.slice(2, 7)}-${limitedPhone.slice(7)}`;
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    
+    if (name === 'telefone') {
+      // Apply phone mask
+      const formattedPhone = formatPhoneNumber(value);
+      setTelefone(formattedPhone);
+    }
+    // Note: other fields are handled by their individual onChange handlers
+  };
+
   return (
     <>
       <div className="modal-backdrop fade show" style={{ display: 'block' }}></div>
@@ -115,11 +144,12 @@ function RegistrationModal({ isOpen, onClose, type, onSubmit }) {
                   <label htmlFor="telefone" className="form-label">Telefone</label>
                   <input 
                     type="tel" 
-                    className="form-control" 
+                    className="form-control phone-input" 
                     id="telefone" 
+                    name="telefone"
                     value={telefone} 
-                    onChange={(e) => setTelefone(e.target.value)} 
-                    placeholder="(00) 00000-0000"
+                    onChange={handleChange} 
+                    placeholder="(11) 99999-9999"
                     required 
                     disabled={loading}
                   />
