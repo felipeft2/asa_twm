@@ -35,9 +35,9 @@ function Header({
             {isLoggedIn && ( 
               <li className="nav-item">
                 <a 
-                  className={`nav-link ${currentView === 'my' ? 'active fw-bold' : ''}`} 
+                  className={`nav-link ${currentView === 'aluno' ? 'active fw-bold' : ''}`} 
                   href="#" 
-                  onClick={() => setCurrentView('my')}>
+                  onClick={() => setCurrentView('aluno')}>
                   Meus Treinos
                 </a>
               </li>

@@ -42,12 +42,10 @@ function App() {
     try {
       setLoading(true);
       const favorites = await favoritoService.getAllFavorites();
-      // Filter favorites for current user (assuming favorites have userId field)
       const userFavorites = favorites.filter(fav => fav.usuarioId === currentUser.id);
       setMyWorkouts(userFavorites);
     } catch (error) {
       console.error('Error loading favorites:', error);
-      // For now, use mock data if API fails
       setMyWorkouts([mockWorkouts.mockWorkouts[0]]);
     } finally {
       setLoading(false);
@@ -117,7 +115,7 @@ function App() {
 
       setCurrentUser(response.data);
       setIsLoggedIn(true);
-      setCurrentView('my');
+      setCurrentView(response.tipo === 'ALUNO' ? 'aluno' : 'treinador');
       
       alert(`Bem-vindo(a), ${response.nome || userData.email}!`);
       closeLoginModal();
@@ -152,8 +150,7 @@ function App() {
 
     try {
       setLoading(true);
-      
-      // Create favorite object for backend
+  
       const favoriteData = {
         usuarioId: currentUser.id,
         treinoId: workoutToAdd.id,
@@ -166,12 +163,10 @@ function App() {
       const response = await favoritoService.addFavorite(favoriteData);
       console.log('Favorite added:', response);
       
-      // Update local state
       setMyWorkouts(prevWorkouts => [...prevWorkouts, workoutToAdd]);
       alert(`"${workoutToAdd.title}" adicionado aos seus treinos!`);
     } catch (error) {
       console.error('Error adding favorite:', error);
-      // If API fails, still update local state for demo purposes
       setMyWorkouts(prevWorkouts => [...prevWorkouts, workoutToAdd]);
       alert(`"${workoutToAdd.title}" adicionado aos seus treinos!`);
     } finally {
@@ -273,7 +268,7 @@ function App() {
           </>
         )}
         
-        {currentView === 'my' && (
+        {currentView === 'aluno' && (
           <>
             <div className="p-4 p-md-5 mb-4 rounded text-center bg-secondary">
               <h1 className="display-5 fst-italic">Meus Treinos</h1>
@@ -293,6 +288,28 @@ function App() {
               <MyWorkoutsPlaceholder />
             )}
           </>
+        )}
+
+        {currentView === 'treinador' && (
+           <>
+              <div className="p-4 p-md-5 mb-4 rounded text-center bg-secondary">
+              <h1 className="display-5 fst-italic">Monte um treino!</h1>
+              <p className="lead my-3 text-light">Selecione até 6 exercícios.</p>
+              {currentUser && (
+                <p className="text-warning">Olá, {currentUser.nome}!</p>
+              )}
+            </div>
+            {myWorkouts.length > 0 ? (
+              <WorkoutList 
+                list={myWorkouts} 
+                onRemove={removeWorkoutFromMyList}
+                showAddButton={false}
+                showRemoveButton={true}
+              />
+            ) : (
+              <MyWorkoutsPlaceholder />
+            )}
+           </>
         )}
       </main>
 
