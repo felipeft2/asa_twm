@@ -19,5 +19,11 @@ public class Treino {
 
     @Column(name = "descricao", length = 50)
     private String descricao;
+
+    @Column(name = "imagem", length = 200)
+    private String imagem;
+
+    @Column(name = "treinador", length = 50)
+    private String treinador;
 }
 

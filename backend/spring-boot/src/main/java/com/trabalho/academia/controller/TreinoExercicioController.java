@@ -21,7 +21,7 @@ import com.trabalho.academia.service.TreinoExercicioService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1/TreinoExercicios")
+@RequestMapping("/api/v1/treinoExercicios")
 public class TreinoExercicioController {
      @Autowired
     private TreinoExercicioService treinoExercicioService;

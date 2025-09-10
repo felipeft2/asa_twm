@@ -112,7 +112,7 @@ export const favoritoService = {
   // Get all favorites
   getAllFavorites: async () => {
     try {
-      const response = await api.get('/Favoritos');
+      const response = await api.get('/favoritos');
       return response.data;
     } catch (error) {
       throw error.response?.data || error;
@@ -122,7 +122,7 @@ export const favoritoService = {
   // Get favorite by ID
   getFavoriteById: async (id) => {
     try {
-      const response = await api.get(`/Favoritos/${id}`);
+      const response = await api.get(`/favoritos/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error;
@@ -131,18 +131,13 @@ export const favoritoService = {
 
   // Add favorite
   addFavorite: async (favoriteData) => {
-    try {
-      const response = await api.post('/Favoritos', favoriteData);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error;
-    }
+    return axios.post('/favoritos', favoriteData);
   },
 
   // Update favorite
   updateFavorite: async (id, favoriteData) => {
     try {
-      const response = await api.put(`/Favoritos/${id}`, favoriteData);
+      const response = await api.put(`/favoritos/${id}`, favoriteData);
       return response.data;
     } catch (error) {
       throw error.response?.data || error;
@@ -152,7 +147,7 @@ export const favoritoService = {
   // Delete favorite
   deleteFavorite: async (id) => {
     try {
-      await api.delete(`/Favoritos/${id}`);
+      await api.delete(`/favoritos/${id}`);
       return true;
     } catch (error) {
       throw error.response?.data || error;
@@ -160,22 +155,27 @@ export const favoritoService = {
   }
 };
 
+// export const FavoritoService = {
+//   getAll: async () =>{
+//     const res = await api.get('/favoritos');
+//   }
+// };
 
 export const treinoService = {
   getAll: async () => {
-    const res = await api.get('/Treinos');
+    const res = await api.get('/treinos');
     return res.data;
   },
-  getAllWithExercises: async () => {
-    const res = await api.get('/Treinos/comExercicios');
-    return res.data;
-  },
-  createWithExercises: async (payload) => {
-    const res = await api.post('/Treinos/comExercicios', payload);
-    return res.data;
-  },
+  //getAllWithExercises: async () => {
+  //  const res = await api.get('/treinos/comExercicios');
+  //  return res.data;
+  //},
+  //createWithExercises: async (payload) => {
+  //  const res = await api.post('/treinos/comExercicios', payload);
+  //  return res.data;
+  //},
   getExercises: async () => {
-    const res = await api.get('/Exercicios');
+    const res = await api.get('/exercicios');
     return res.data;
   }
 };

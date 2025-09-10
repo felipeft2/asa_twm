@@ -21,7 +21,7 @@ import com.trabalho.academia.service.FavoritoService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1/Favoritos")
+@RequestMapping("/api/v1/favoritos")
 public class FavoritoController {
      @Autowired
     private FavoritoService favoritoService;

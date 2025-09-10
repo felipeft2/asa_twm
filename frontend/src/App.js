@@ -9,7 +9,7 @@ import NewTreinoModal from './components/NewTreinoModal';
 import mockWorkouts from './data/mockWorkouts.json';
 
 function App() {
-  const [workouts] = useState(mockWorkouts.mockWorkouts);
+  const [workouts, setWorkouts] = useState([]);
   const [myWorkouts, setMyWorkouts] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -38,6 +38,17 @@ function App() {
         }
       }
     };
+    const loadWorkouts = async() => {
+      try{
+        const data = await treinoService.getAll();
+        setWorkouts(data);
+      }
+      catch(error){
+        console.error("Erro ao carregar treinos: ", error);
+        setWorkouts(mockWorkouts.mockWorkouts);
+      }
+    }
+    loadWorkouts();
     checkLoggedInUser();
   }, []); 
 
@@ -163,14 +174,14 @@ function App() {
     try {
       setLoading(true);
       
+      const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleDateString();
+
       // Create favorite object for backend
       const favoriteData = {
-        usuarioId: currentUser.id,
-        treinoId: workoutToAdd.id,
-        titulo: workoutToAdd.title,
-        descricao: workoutToAdd.description,
-        instrutor: workoutToAdd.instructor,
-        imagem: workoutToAdd.image
+        usuario: currentUser.id,
+        treino: workoutToAdd.id,
+        data: formattedDate
       };
 
       const response = await favoritoService.addFavorite(favoriteData);
