@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.trabalho.academia.dto.TreinoDTO;
 import com.trabalho.academia.model.Treino;
 import com.trabalho.academia.service.TreinoService;
 
@@ -25,6 +26,7 @@ import com.trabalho.academia.service.TreinoService;
 public class TreinoController {
      @Autowired
     private TreinoService treinoService;
+    
 
     @GetMapping
     public ResponseEntity<List<Treino>> findAll(){
@@ -53,6 +55,12 @@ public class TreinoController {
             return ResponseEntity.status(HttpStatus.OK).body(treinoService.update(treino));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @PostMapping("/comExercicios")
+    public ResponseEntity<TreinoDTO> createWithExercises(@RequestBody TreinoDTO treinoDTO){
+        TreinoDTO treino = treinoService.saveWithExercises(treinoDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(treino);
     }
 
     @DeleteMapping("/{id}")

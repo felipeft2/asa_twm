@@ -57,6 +57,7 @@ function NewTreinoModal({ isOpen, onClose, onCreated }) {
         carga: r.carga ? Number(r.carga) : null
       }))
     };
+    console.log(payload);
     try{
       setLoading(true);
       const created = await treinoService.createWithExercises(payload);

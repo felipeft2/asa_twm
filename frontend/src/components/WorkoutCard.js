@@ -6,17 +6,36 @@ function WorkoutCard({ workout, onAddWorkout, showAddButton }) {
   const { id, nome, descricao, imagem, treinador } = workout;
 
   return (
-    <div className="card bg-secondary text-white h-100 shadow-lg border-0">
-      <img src={imagem} className="card-img-top" alt={`Imagem do treino de ${nome}`} />
-      <div className="card-body d-flex flex-column">
-        <h5 className="card-title text-white">{nome}</h5> {/* Título branco */}
-        <h6 className="card-subtitle mb-2 text-warning fst-italic">com {treinador}</h6> {/* Subtítulo amarelo */}
-        <p className="card-text flex-grow-1 text-light">{descricao}</p> {/* Descrição light */}
-        <div className="d-flex justify-content-between align-items-center mt-auto">
-          <a href={`${nerd_emoji}`} className="btn btn-outline-warning">Ver Detalhes</a> {/* Botão outline amarelo */}
+    <div className="card bg-secondary text-white h-100 shadow-lg border-0 w-100">
+      <img 
+        src={imagem} 
+        className="card-img-top" 
+        alt={`Imagem do treino de ${nome}`}
+        style={{
+          height: '200px',
+          objectFit: 'cover',
+          objectPosition: 'center',
+          borderTopLeftRadius: '0.375rem',
+          borderTopRightRadius: '0.375rem'
+        }}
+      />
+      <div className="card-body d-flex flex-column p-3">
+        <h5 className="card-title text-white mb-2" style={{ minHeight: '1.5rem', fontSize: '1.1rem' }}>{nome}</h5>
+        <h6 className="card-subtitle mb-2 text-warning fst-italic" style={{ minHeight: '1.2rem', fontSize: '0.9rem' }}>com {treinador}</h6>
+        <p className="card-text flex-grow-1 text-light" style={{ 
+          minHeight: '3rem', 
+          fontSize: '0.85rem',
+          lineHeight: '1.4',
+          overflow: 'hidden',
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical'
+        }}>{descricao}</p>
+        <div className="d-flex justify-content-between align-items-center mt-auto pt-2">
+          <a href={`${nerd_emoji}`} className="btn btn-outline-warning btn-sm flex-grow-1 me-2">Ver Detalhes</a>
           {showAddButton && (
-             <button className="btn btn-warning" onClick={() => onAddWorkout(workout)}> {/* Botão amarelo sólido */}
-                + Adicionar
+             <button className="btn btn-warning btn-sm" onClick={() => onAddWorkout(workout)}>
+                + Add
              </button>
           )}
         </div>

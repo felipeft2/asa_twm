@@ -168,14 +168,14 @@ export const treinoService = {
       console.log("grocada de 30;")
     }
   },
-  //getAllWithExercises: async () => {
+  // getAllWithExercises: async () => {
   //  const res = await api.get('/treinos/comExercicios');
   //  return res.data;
   //},
-  //createWithExercises: async (payload) => {
-  //  const res = await api.post('/treinos/comExercicios', payload);
-  //  return res.data;
-  //},
+  createWithExercises: async (payload) => {
+   const res = await api.post('/treinos/comExercicios', payload);
+   return res.data;
+  },
   //getTreino: async () => {
   //  const res = await api.get('/treinos');
   //  return res.data;

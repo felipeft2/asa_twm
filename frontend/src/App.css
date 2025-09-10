@@ -72,3 +72,25 @@ body {
 .navbar-nav .nav-link.active {
   color: var(--gymlife-yellow) !important;
 }
+
+/* Uniformização dos cards */
+.card.h-100 {
+  min-height: 400px;
+  max-height: 450px;
+}
+
+.card .card-body {
+  padding: 1rem;
+  min-height: 200px;
+}
+
+/* Garante que todos os cards tenham a mesma altura em uma linha */
+.row.g-4 .col-12.col-md-6.col-lg-4 {
+  margin-bottom: 1.5rem;
+}
+
+.row.g-4 .col-12.col-md-6.col-lg-4 .card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
