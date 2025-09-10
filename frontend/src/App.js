@@ -4,7 +4,8 @@ import RegistrationModal from './components/RegistrationModal';
 import LoginModal from './components/LoginModal';
 import Header from './components/Header';
 import './App.css';
-import { userService, favoritoService } from './services/api';
+import { userService, favoritoService, treinoService } from './services/api';
+import NewTreinoModal from './components/NewTreinoModal';
 import mockWorkouts from './data/mockWorkouts.json';
 
 function App() {
@@ -17,6 +18,8 @@ function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isNewTreinoOpen, setIsNewTreinoOpen] = useState(false);
+  const [allTreinos, setAllTreinos] = useState([]); // treinos reais do backend
 
   useEffect(() => {
     const checkLoggedInUser = async() => {
@@ -57,6 +60,13 @@ function App() {
   useEffect(() => {
     if (currentUser) {
       loadUserFavorites();
+      // carregar treinos reais
+      (async () => {
+        try {
+          const data = await treinoService.getAllWithExercises();
+          setAllTreinos(data);
+        } catch (e) { /* silencioso */ }
+      })();
     }
   }, [currentUser, loadUserFavorites]);
 
@@ -263,6 +273,9 @@ function App() {
             <div className="p-4 p-md-5 mb-4 rounded text-center bg-secondary">
               <h1 className="display-5 fst-italic">Nossos Treinos</h1>
               <p className="lead my-3 text-light">Escolha seu foco e comece a transformar seu corpo e mente.</p>
+              {currentUser?.tipo === 'TREINADOR' && (
+                <button className="btn btn-warning" onClick={()=> setIsNewTreinoOpen(true)}>+ Novo Treino</button>
+              )}
             </div>
             <WorkoutList 
               list={workouts} 
@@ -270,6 +283,22 @@ function App() {
               showAddButton={isLoggedIn}
               showRemoveButton={false}
             />
+            {allTreinos.length > 0 && (
+              <div className="mt-5">
+                <h3 className="text-warning mb-3">Treinos Criados pelos Treinadores</h3>
+                <ul className="list-group">
+                  {allTreinos.map(t => (
+                    <li key={t.id} className="list-group-item bg-dark text-white d-flex justify-content-between align-items-center">
+                      <div>
+                        <strong>{t.nome}</strong> <span className="text-muted">- {t.descricao}</span><br />
+                        <small className="text-info">{t.exercicios.length} exercício(s)</small>
+                      </div>
+                      {isLoggedIn && <button className="btn btn-sm btn-outline-warning" onClick={()=> addWorkoutToMyList({ id: t.id, title: t.nome, description: t.descricao, instructor: 'Treinador', image: '' })}>Favoritar</button>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </>
         )}
         
@@ -306,6 +335,13 @@ function App() {
         isOpen={isLoginModalOpen}
         onClose={closeLoginModal}
         onLogin={handleLogin}
+      />
+      <NewTreinoModal 
+        isOpen={isNewTreinoOpen} 
+        onClose={()=> setIsNewTreinoOpen(false)} 
+        onCreated={(novo)=> {
+          setAllTreinos(prev => [...prev, novo]);
+        }}
       />
     </div>
   );

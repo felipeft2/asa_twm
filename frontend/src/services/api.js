@@ -160,4 +160,24 @@ export const favoritoService = {
   }
 };
 
+
+export const treinoService = {
+  getAll: async () => {
+    const res = await api.get('/Treinos');
+    return res.data;
+  },
+  getAllWithExercises: async () => {
+    const res = await api.get('/Treinos/comExercicios');
+    return res.data;
+  },
+  createWithExercises: async (payload) => {
+    const res = await api.post('/Treinos/comExercicios', payload);
+    return res.data;
+  },
+  getExercises: async () => {
+    const res = await api.get('/Exercicios');
+    return res.data;
+  }
+};
+  
 export default api;
