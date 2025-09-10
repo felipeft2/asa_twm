@@ -66,7 +66,6 @@ export const userService = {
     }
   },
 
-  // Get user by ID
   getUserById: async (id) => {
     try {
       const response = await api.get(`/usuarios/${id}`);
@@ -76,7 +75,6 @@ export const userService = {
     }
   },
 
-  // Update user
   updateUser: async (id, userData) => {
     try {
       const response = await api.put(`/usuarios/${id}`, userData);
@@ -86,7 +84,6 @@ export const userService = {
     }
   },
 
-  // Delete user
   deleteUser: async (id) => {
     try {
       await api.delete(`/usuarios/${id}`);
@@ -107,9 +104,8 @@ export const userService = {
   }
 };
 
-// Favorites/Workouts services
 export const favoritoService = {
-  // Get all favorites
+
   getAllFavorites: async () => {
     try {
       const response = await api.get('/favoritos');
@@ -119,7 +115,6 @@ export const favoritoService = {
     }
   },
 
-  // Get favorite by ID
   getFavoriteById: async (id) => {
     try {
       const response = await api.get(`/favoritos/${id}`);
@@ -129,12 +124,10 @@ export const favoritoService = {
     }
   },
 
-  // Add favorite
   addFavorite: async (favoriteData) => {
     return axios.post('/favoritos', favoriteData);
   },
 
-  // Update favorite
   updateFavorite: async (id, favoriteData) => {
     try {
       const response = await api.put(`/favoritos/${id}`, favoriteData);
@@ -144,7 +137,6 @@ export const favoritoService = {
     }
   },
 
-  // Delete favorite
   deleteFavorite: async (id) => {
     try {
       await api.delete(`/favoritos/${id}`);

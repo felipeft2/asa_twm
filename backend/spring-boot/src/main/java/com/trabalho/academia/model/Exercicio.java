@@ -11,7 +11,8 @@ import lombok.Data;
 @Data
 public class Exercicio {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_exercicio")
     private Long id;
 
     @Column(name = "nome", length = 50)
@@ -20,7 +21,7 @@ public class Exercicio {
     @Column(name = "descricao", length = 50)
     private String descricao;
 
-    @Column(name = "grupoMuscular", length = 50)
+    @Column(name = "grupo_muscular", length = 50)
     private String grupoMuscular;
 }
 
