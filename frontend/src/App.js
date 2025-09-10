@@ -112,7 +112,7 @@ function App() {
       console.log('Registration successful:', response);
       alert(`Cadastro de ${userData.tipo} realizado com sucesso! Faça login para continuar.`);
       closeRegistrationModal();
-      openLoginModal(); // Open login modal after successful registration
+      openLoginModal(); 
     } catch (error) {
       console.error('Registration error:', error);
       setError(error.message || 'Erro ao realizar cadastro. Tente novamente.');
@@ -210,7 +210,6 @@ function App() {
       alert(`"${workoutToAdd.nome}" adicionado aos seus treinos!`);
     } catch (error) {
       console.error('Error adding favorite:', error);
-      // If API fails, still update local state for demo purposes
       setMyWorkouts(prevWorkouts => [...prevWorkouts, workoutToAdd]);
       alert(`"${workoutToAdd.title}" adicionado aos seus treinos!`);
     } finally {
@@ -313,29 +312,6 @@ function App() {
               showAddButton={isLoggedIn}
               showRemoveButton={false}
             />
-            {/* {allTreinos.length > 0 && (
-              <div className="mt-5">
-                <h3 className="text-warning mb-3">Treinos Criados pelos Treinadores</h3>
-                <ul className="list-group">
-                  {allTreinos.map(t => (
-                    <li key={t.id} className="list-group-item bg-dark text-white d-flex justify-content-between align-items-center">
-                      <div>
-                        <strong>{t.nome}</strong> <span className="text-muted">- {t.descricao}</span><br />
-                        <small className="text-info">{t.exercicios.length} exercício(s)</small>
-                      </div>
-                      {isLoggedIn && <button className="btn btn-sm btn-outline-warning" onClick={async ()=> {
-                        try {
-                          // Se já temos os dados básicos, usamos diretamente; se precisar de detalhes, poderíamos buscar.
-                          await addWorkoutToMyList(t);
-                        } catch(e){
-                          console.error('Erro ao favoritar treino', e);
-                        }
-                      }}>Favoritar</button>}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )} */}
           </>
         )}
         
@@ -377,10 +353,8 @@ function App() {
         isOpen={isNewTreinoOpen} 
         onClose={()=> setIsNewTreinoOpen(false)} 
         onCreated={(novo)=> {
-          // Adiciona o novo treino imediatamente às listas relevantes para evitar necessidade de F5
           setAllTreinos(prev => [...prev, novo]);
-          setWorkouts(prev => [novo, ...prev]); // aparece no topo em "Nossos Treinos"
-          // Opcional: garantir que usuário esteja vendo a aba correta
+          setWorkouts(prev => [novo, ...prev]);
           setCurrentView('all');
         }}
       />

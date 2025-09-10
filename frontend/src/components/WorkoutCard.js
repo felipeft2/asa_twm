@@ -11,7 +11,6 @@ function WorkoutCard({ workout = {}, onAddWorkout, showAddButton }) {
     treinador: rawTreinador
   } = workout || {};
 
-  // Normalizações seguras
   const imagem = (typeof rawImagem === 'string' && rawImagem.trim() !== '')
     ? rawImagem.trim()
     : 'https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2025/02/treino.jpg?w=419&h=283&crop=0';

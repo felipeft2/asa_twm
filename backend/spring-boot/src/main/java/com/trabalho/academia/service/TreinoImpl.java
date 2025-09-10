@@ -54,13 +54,11 @@ public class TreinoImpl implements TreinoService {
 
     @Override
     public TreinoDTO saveWithExercises(@RequestBody TreinoDTO treinoDTO) {
-        // Salva o treino
         Treino treino = new Treino();
         treino.setNome(treinoDTO.getNome());
         treino.setDescricao(treinoDTO.getDescricao());
         treinoRepository.save(treino);
 
-        // Salva os TreinoExercicio
         for (TreinoDTO.ExercicioDTO exDTO : treinoDTO.getExercicios()) {
             Exercicio exercicio = exercicioService.findById(exDTO.getExercicioId())
                     .orElseThrow(() -> new RuntimeException("Exercício não encontrado: " + exDTO.getExercicioId()));
