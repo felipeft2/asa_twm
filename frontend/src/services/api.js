@@ -160,12 +160,12 @@ export const favoritoService = {
 
 export const treinoService = {
   getAll: async () => {
-    try{
+    try {
       const res = await api.get('/treinos');
-      return res.data;
-    }
-    catch(err){
-      console.log("grocada de 30;")
+      return Array.isArray(res.data) ? res.data : [];
+    } catch (err) {
+      console.error('Erro ao buscar treinos:', err);
+      throw err;
     }
   },
   // getAllWithExercises: async () => {
@@ -186,6 +186,18 @@ export const treinoService = {
       return response.data;
     } catch (error) {
       throw error.response?.data || error;
+    }
+  }
+};
+
+export const exercicioService = { 
+  getAll: async () => {
+    try {
+      const res = await api.get('/exercicios');
+      return Array.isArray(res.data) ? res.data : [];
+    } catch (err) {
+      console.error('Erro ao buscar exercícios:', err);
+      throw err;
     }
   }
 };

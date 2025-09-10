@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { treinoService } from '../services/api';
+import { exercicioService, treinoService } from '../services/api';
 
 function NewTreinoModal({ isOpen, onClose, onCreated }) {
   const [nome, setNome] = useState('');
@@ -14,7 +14,7 @@ function NewTreinoModal({ isOpen, onClose, onCreated }) {
       (async () => {
         try{
           setLoading(true);
-          const data = await treinoService.getExercises();
+          const data = await exercicioService.getAll();
           setExercicios(data);
         }catch(e){
           setError('Falha ao carregar exercícios');

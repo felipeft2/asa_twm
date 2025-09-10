@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, use } from 'react';
 import WorkoutCard from './components/WorkoutCard';
 import RegistrationModal from './components/RegistrationModal';
 import LoginModal from './components/LoginModal';
@@ -41,10 +41,12 @@ function App() {
     const loadWorkouts = async() => {
       try{
         const data = await treinoService.getAll();
+        console.log('Treinos carregados da API:', data);
         setWorkouts(data);
       }
       catch(error){
         console.error("Erro ao carregar treinos: ", error);
+        console.log('Usando mockWorkouts como fallback');
         setWorkouts(mockWorkouts.mockWorkouts);
       }
     }
@@ -77,9 +79,10 @@ function App() {
       // carregar treinos reais
       (async () => {
         try {
-          const data = await treinoService.getAllWithExercises();
+          // Endpoint comExercicios está comentado no serviço; reutiliza getAll por enquanto
+          const data = await treinoService.getAll();
           setAllTreinos(data);
-        } catch (e) { /* silencioso */ }
+        } catch (e) { console.warn('Não foi possível carregar treinos com exercícios:', e); }
       })();
     }
   }, [currentUser, loadUserFavorites]);
@@ -164,6 +167,16 @@ function App() {
   };
 
   const addWorkoutToMyList = async (workoutToAdd) => {
+    if (workoutToAdd && typeof workoutToAdd.then === 'function') {
+      console.warn('Foi passada uma Promise em vez de um objeto treino para addWorkoutToMyList. Aguarde resolução.');
+      try {
+        const resolved = await workoutToAdd;
+        return addWorkoutToMyList(resolved);
+      } catch(e){
+        console.error('Falha ao resolver Promise de treino:', e);
+        return;
+      }
+    }
     if (!currentUser) {
       alert('Você precisa estar logado para adicionar treinos aos favoritos.');
       return;
@@ -220,21 +233,22 @@ function App() {
     }
   };
 
-  const WorkoutList = ({ list, onAdd, onRemove, showAddButton, showRemoveButton }) => (
-    <div className="row g-4">
-      {list.map(workout => (
-        <div key={workout.id} className="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
-          <WorkoutCard 
-            workout={workout} 
-            onAddWorkout={onAdd} 
-            onRemoveWorkout={onRemove}
-            showAddButton={showAddButton}
-            showRemoveButton={showRemoveButton}
-          />
-        </div>
-      ))}
-    </div>
-  );
+  const WorkoutList = ({ list = [], onAdd, onRemove, showAddButton, showRemoveButton }) => (
+  <div className="row g-4">
+    {Array.isArray(list) && list.map(workout => (
+      <div key={workout.id} className="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+        <WorkoutCard 
+          workout={workout} 
+          onAddWorkout={onAdd} 
+          onRemoveWorkout={onRemove}
+          showAddButton={showAddButton}
+          showRemoveButton={showRemoveButton}
+        />
+      </div>
+    ))}
+  </div>
+);
+
 
   const MyWorkoutsPlaceholder = () => {
     if (!isLoggedIn) {
@@ -299,7 +313,7 @@ function App() {
               showAddButton={isLoggedIn}
               showRemoveButton={false}
             />
-            {allTreinos.length > 0 && (
+            {/* {allTreinos.length > 0 && (
               <div className="mt-5">
                 <h3 className="text-warning mb-3">Treinos Criados pelos Treinadores</h3>
                 <ul className="list-group">
@@ -309,12 +323,19 @@ function App() {
                         <strong>{t.nome}</strong> <span className="text-muted">- {t.descricao}</span><br />
                         <small className="text-info">{t.exercicios.length} exercício(s)</small>
                       </div>
-                      {isLoggedIn && <button className="btn btn-sm btn-outline-warning" onClick={()=> addWorkoutToMyList(treinoService.getTreinoById(t.id))}>Favoritar</button>}
+                      {isLoggedIn && <button className="btn btn-sm btn-outline-warning" onClick={async ()=> {
+                        try {
+                          // Se já temos os dados básicos, usamos diretamente; se precisar de detalhes, poderíamos buscar.
+                          await addWorkoutToMyList(t);
+                        } catch(e){
+                          console.error('Erro ao favoritar treino', e);
+                        }
+                      }}>Favoritar</button>}
                     </li>
                   ))}
                 </ul>
               </div>
-            )}
+            )} */}
           </>
         )}
         
@@ -356,7 +377,11 @@ function App() {
         isOpen={isNewTreinoOpen} 
         onClose={()=> setIsNewTreinoOpen(false)} 
         onCreated={(novo)=> {
+          // Adiciona o novo treino imediatamente às listas relevantes para evitar necessidade de F5
           setAllTreinos(prev => [...prev, novo]);
+          setWorkouts(prev => [novo, ...prev]); // aparece no topo em "Nossos Treinos"
+          // Opcional: garantir que usuário esteja vendo a aba correta
+          setCurrentView('all');
         }}
       />
     </div>
