@@ -125,7 +125,12 @@ export const favoritoService = {
   },
 
   addFavorite: async (favoriteData) => {
-    return axios.post('/favoritos', favoriteData);
+    try {
+      const response = await api.post(`/favoritos`, favoriteData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
   },
 
   updateFavorite: async (id, favoriteData) => {
@@ -155,8 +160,13 @@ export const favoritoService = {
 
 export const treinoService = {
   getAll: async () => {
-    const res = await api.get('/treinos');
-    return res.data;
+    try{
+      const res = await api.get('/treinos');
+      return res.data;
+    }
+    catch(err){
+      console.log("grocada de 30;")
+    }
   },
   //getAllWithExercises: async () => {
   //  const res = await api.get('/treinos/comExercicios');
@@ -166,9 +176,17 @@ export const treinoService = {
   //  const res = await api.post('/treinos/comExercicios', payload);
   //  return res.data;
   //},
-  getExercises: async () => {
-    const res = await api.get('/exercicios');
-    return res.data;
+  //getTreino: async () => {
+  //  const res = await api.get('/treinos');
+  //  return res.data;
+  //},
+  getTreinoById: async (id) => {
+    try {
+      const response = await api.get(`/treinos/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error;
+    }
   }
 };
   

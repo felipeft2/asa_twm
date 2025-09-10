@@ -17,10 +17,10 @@ public class Treino {
     @Column(name = "nome", length = 50)
     private String nome;
 
-    @Column(name = "descricao", length = 50)
+    @Column(name = "descricao", length = 500)
     private String descricao;
 
-    @Column(name = "imagem", length = 200)
+    @Column(name = "imagem", length = 2000)
     private String imagem;
 
     @Column(name = "treinador", length = 50)

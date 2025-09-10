@@ -23,7 +23,7 @@ import com.trabalho.academia.service.FavoritoService;
 @RestController
 @RequestMapping("/api/v1/favoritos")
 public class FavoritoController {
-     @Autowired
+    @Autowired
     private FavoritoService favoritoService;
 
     @GetMapping

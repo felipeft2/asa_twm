@@ -53,16 +53,19 @@ function App() {
   }, []); 
 
   const loadUserFavorites = useCallback(async () => {
+    if (!currentUser) return; // Make sure user is set
+
     try {
       setLoading(true);
       const favorites = await favoritoService.getAllFavorites();
-      // Filter favorites for current user (assuming favorites have userId field)
-      const userFavorites = favorites.filter(fav => fav.usuarioId === currentUser.id);
+      const userFavorites = favorites.filter(fav => fav.usuario.id === currentUser.id).map(fav => fav.treino);
+      //console.log(favorites);
+      console.log(userFavorites);
+
       setMyWorkouts(userFavorites);
     } catch (error) {
       console.error('Error loading favorites:', error);
-      // For now, use mock data if API fails
-      setMyWorkouts([mockWorkouts.mockWorkouts[0]]);
+      setMyWorkouts([mockWorkouts.mockWorkouts[0]]); // fallback if error
     } finally {
       setLoading(false);
     }
@@ -175,21 +178,23 @@ function App() {
       setLoading(true);
       
       const currentDate = new Date();
-      const formattedDate = currentDate.toLocaleDateString();
+      const formattedDate = currentDate.toISOString().split('T')[0];
 
       // Create favorite object for backend
       const favoriteData = {
-        usuario: currentUser.id,
-        treino: workoutToAdd.id,
+        usuario: currentUser,
+        treino: workoutToAdd,
         data: formattedDate
       };
+      //alert(`${favoriteData.usuario}, ${favoriteData.treino}, ${favoriteData.data}`)
 
       const response = await favoritoService.addFavorite(favoriteData);
       console.log('Favorite added:', response);
       
       // Update local state
       setMyWorkouts(prevWorkouts => [...prevWorkouts, workoutToAdd]);
-      alert(`"${workoutToAdd.title}" adicionado aos seus treinos!`);
+      console.log(`my workouts: ${myWorkouts}`);
+      alert(`"${workoutToAdd.nome}" adicionado aos seus treinos!`);
     } catch (error) {
       console.error('Error adding favorite:', error);
       // If API fails, still update local state for demo purposes
@@ -304,7 +309,7 @@ function App() {
                         <strong>{t.nome}</strong> <span className="text-muted">- {t.descricao}</span><br />
                         <small className="text-info">{t.exercicios.length} exercício(s)</small>
                       </div>
-                      {isLoggedIn && <button className="btn btn-sm btn-outline-warning" onClick={()=> addWorkoutToMyList({ id: t.id, title: t.nome, description: t.descricao, instructor: 'Treinador', image: '' })}>Favoritar</button>}
+                      {isLoggedIn && <button className="btn btn-sm btn-outline-warning" onClick={()=> addWorkoutToMyList(treinoService.getTreinoById(t.id))}>Favoritar</button>}
                     </li>
                   ))}
                 </ul>
